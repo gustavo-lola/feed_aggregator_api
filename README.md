@@ -1,5 +1,10 @@
 # Feed Aggregator API 
 
+<img width="1470" height="956" alt="Screenshot 2026-05-06 at 14 41 53" src="https://github.com/user-attachments/assets/c9a2ab15-d214-4f9f-b702-3467aafe6fd8" />
+
+<img width="1470" height="956" alt="Screenshot 2026-05-06 at 14 42 49" src="https://github.com/user-attachments/assets/d70e349d-5de8-4e6d-95d5-76b936bbbb4f" />
+
+
 Este é um sistema para agregar itens de feeds RSS e expô-los via uma API JSON.
 
 Visão geral
