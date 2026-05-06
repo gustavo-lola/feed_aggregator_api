@@ -4,7 +4,7 @@ class FeedService
   end
 
   def fetch
-    require 'open-uri'
+    require "open-uri"
     raw = URI.open(@feed.url).read
     parsed_feed = Feedjira.parse(raw)
     update_feed(parsed_feed)

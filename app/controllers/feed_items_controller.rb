@@ -5,7 +5,7 @@ class FeedItemsController < ApplicationController
       @feed_items = @feed_items.joins(:feed).where(feeds: { category: params[:category] })
     end
 
-    if params[:unread] == 'true'
+    if params[:unread] == "true"
       @feed_items = @feed_items.unread
     end
 
@@ -32,6 +32,6 @@ class FeedItemsController < ApplicationController
       FeedItem.update_all(read: true)
     end
 
-    redirect_back fallback_location: feed_items_path, notice: 'Todas Notícias Foram Lidas'
+    redirect_back fallback_location: feed_items_path, notice: "Todas Notícias Foram Lidas"
   end
 end

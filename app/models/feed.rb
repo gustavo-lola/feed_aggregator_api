@@ -26,10 +26,10 @@ class Feed < ApplicationRecord
     begin
       uri = URI.parse(url)
       unless uri.is_a?(URI::HTTP) || uri.is_a?(URI::HTTPS)
-        errors.add(:url, 'não é uma URL válida')
+        errors.add(:url, "não é uma URL válida")
       end
     rescue URI::InvalidURIError
-      errors.add(:url, 'não é uma URL válida')
+      errors.add(:url, "não é uma URL válida")
     end
   end
 end

@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :feed_items, only: [:index, :show] do
+  resources :feed_items, only: [ :index, :show ] do
     member do
       post :mark_as_read
     end
@@ -20,7 +20,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      devise_for :users, controllers: { sessions: 'api/v1/users/sessions' }, defaults: { format: :json }
+      devise_for :users, controllers: { sessions: "api/v1/users/sessions" }, defaults: { format: :json }
 
       resources :feeds do
         member do
@@ -28,7 +28,7 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :feed_items, only: [:index, :show] do
+      resources :feed_items, only: [ :index, :show ] do
         member do
           post :mark_as_read
         end

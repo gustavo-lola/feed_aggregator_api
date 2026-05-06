@@ -1,6 +1,5 @@
 class ChangeReadToBooleanInFeedItems < ActiveRecord::Migration[8.1]
   def up
-
     add_column :feed_items, :read_tmp, :boolean, default: false, null: false
 
     reversible do |dir|

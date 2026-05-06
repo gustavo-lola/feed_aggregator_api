@@ -1,7 +1,7 @@
 module Api
   module V1
     class FeedsController < BaseController
-      before_action :set_feed, only: [:show, :update, :destroy, :refresh]
+      before_action :set_feed, only: [ :show, :update, :destroy, :refresh ]
 
       def index
         @feeds = Feed.includes(:feed_items).order(:category, :name)
@@ -15,7 +15,7 @@ module Api
 
         render json: {
           feed: feed_json(@feed),
-          items: feed_items.as_json(only: [:id, :title, :url, :guid, :author, :published_at, :content_at, :read]),
+          items: feed_items.as_json(only: [ :id, :title, :url, :guid, :author, :published_at, :content_at, :read ]),
           meta: pagination_meta(feed_items)
         }
       end
@@ -63,7 +63,7 @@ module Api
       end
 
       def feed_json(feed)
-        feed.as_json(only: [:id, :name, :url, :category]).merge(unread_count: feed.feed_items.where(read: false).count)
+        feed.as_json(only: [ :id, :name, :url, :category ]).merge(unread_count: feed.feed_items.where(read: false).count)
       end
 
       def feed_params
