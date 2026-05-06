@@ -1,0 +1,16 @@
+<h1><%= @feed.name %></h1>
+<p class="muted"><%= @feed.category %> • <%= @feed.url %></p>
+<p style="margin-top:0.6rem;"><%= button_to 'Refresh', refresh_feed_path(@feed), method: :post, class: 'btn' %> <%= link_to 'Voltar', feeds_path, class: 'btn' %></p>
+
+<div style="margin-top:0.8rem;">
+  <% if @feed_items.present? && @feed_items.any? %>
+    <% @feed_items.each do |item| %>
+      <div class="card">
+        <div class="item-title"><%= link_to item.title.presence || '(sem título)', feed_item_path(item) %></div>
+        <div class="item-meta"><%= item.published_at.presence || item.created_at %> • <%= item.author %></div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="empty">Nenhuma notícia neste feed.</div>
+  <% end %>
+</div>

@@ -1,0 +1,50 @@
+<h1>Últimas Notícias</h1>
+
+<div class="filters">
+  <div style="display:flex;align-items:center;gap:1rem;width:100%;">
+    <div class="muted">Filtros:</div>
+    <div>
+      <%= link_to 'Todas', feed_items_path, class: 'btn' %>
+      <%= link_to 'Não lidas', feed_items_path(unread: 'true'), class: 'btn' %>
+    </div>
+
+    <div style="margin-left:1rem;" class="muted">Categorias:</div>
+    <div>
+      <% @categories.each do |c| %>
+        <%= link_to c, feed_items_path(category: c), class: 'btn' %>
+      <% end %>
+    </div>
+
+    <div style="margin-left:auto;">
+      <%= button_to 'Marcar todas como lidas', mark_all_as_read_feed_items_path, method: :post, class: 'btn' %>
+    </div>
+  </div>
+</div>
+
+<div class="article-list">
+  <% if @feed_items.present? && @feed_items.any? %>
+    <% @feed_items.each do |item| %>
+      <div class="article-card <%= 'unread' unless item.read %>">
+        <div class="article-title"><%= link_to (item.title.presence || '(sem título)'), feed_item_path(item) %></div>
+        <div class="article-meta"><span class="muted"><%= item.feed&.name %></span> • <%= item.published_at.presence || item.created_at %></div>
+        <% if item.content_at.present? %>
+          <p class="article-excerpt"><%= truncate(strip_tags(item.content_at), length: 220) %></p>
+        <% elsif item.url.present? %>
+          <p class="article-excerpt"><%= item.url %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div style="display:flex;justify-content:space-between;margin-top:1rem;">
+      <% if @feed_items.respond_to?(:prev_page) && @feed_items.prev_page %>
+        <%= link_to 'Anterior', url_for(page: @feed_items.prev_page), class: 'btn' %>
+      <% end %>
+
+      <% if @feed_items.respond_to?(:next_page) && @feed_items.next_page %>
+        <%= link_to 'Próxima', url_for(page: @feed_items.next_page), class: 'btn' %>
+      <% end %>
+    </div>
+  <% else %>
+    <div class="empty">Nenhuma notícia encontrada.</div>
+  <% end %>
+</div>

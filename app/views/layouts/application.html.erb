@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>News Reader</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+      :root { --bg:#fff; --text:#0b0b0b; --muted:#6b6b6b; --accent:#4aa3ff; --card-bg: rgba(0,0,0,0.03); --input-bg: rgba(255,255,255,0.02); --input-border: rgba(0,0,0,0.08); }
+      .dark { --bg:#0b0f12; --text:#e6eef3; --muted:#9aa7b2; --accent:#4aa3ff; --card-bg: rgba(255,255,255,0.03); --input-bg: rgba(255,255,255,0.03); --input-border: rgba(255,255,255,0.06); }
+
+      html,body{height:100%;}
+      body{margin:0;padding:0;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+
+      /* Header */
+      header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid rgba(0,0,0,0.06);}
+      .brand{font-weight:700;letter-spacing:1px;}
+      nav a{margin-right:1rem;color:inherit;text-decoration:none;padding:0.45rem 0.6rem;border-radius:6px;border:1px solid transparent}
+      nav a.active{border-color:var(--accent);color:var(--accent)}
+
+      /* Layout */
+      main{max-width:1100px;margin:1.25rem auto;padding:0 1rem;}
+      .card{padding:0.9rem;border-radius:8px;background:var(--card-bg);margin-bottom:0.8rem;border:1px solid var(--input-border);}
+      .muted{color:var(--muted);font-size:0.9rem;}
+      .btn{background:transparent;border:1px solid var(--input-border);padding:0.45rem 0.8rem;border-radius:8px;color:inherit;cursor:pointer;font-family:inherit;text-decoration:none}
+
+      /* Forms */
+      .auth-container{max-width:520px;margin:2.5rem auto;padding:0 1rem;}
+      .form-card{padding:1.2rem;border-radius:10px;background:var(--card-bg);border:1px solid var(--input-border);}
+      .form-label{display:block;font-size:0.95rem;color:var(--muted);margin-bottom:0.25rem;}
+      .form-input{width:100%;padding:0.6rem 0.7rem;background:var(--input-bg);border:1px solid var(--input-border);border-radius:6px;color:var(--text);font-family:inherit;margin-bottom:0.75rem;outline:none;}
+      .form-input::placeholder{color:var(--muted);}
+      .form-input:focus{box-shadow:0 0 0 4px rgba(74,163,255,0.06);border-color:var(--accent);}
+
+      /* Article list */
+      .filters{display:flex;gap:1rem;align-items:center;padding:0.75rem;border-radius:8px;border:1px solid var(--input-border);background:var(--card-bg);margin-bottom:1rem}
+      .filters .muted{margin-right:0.35rem}
+      .filters .btn{padding:0.35rem 0.6rem;border-radius:6px}
+
+      .article-list{margin-top:1rem}
+      .article-card{padding:1.05rem;border-left:4px solid transparent;border-bottom:1px solid var(--input-border);margin-bottom:0.6rem}
+      .article-card.unread{border-left-color:var(--accent)}
+      .article-card:hover{background:rgba(0,0,0,0.02);}
+      .article-title{margin:0 0 0.4rem 0}
+      .article-title a{color:var(--accent);text-decoration:none;font-size:1.05rem}
+      .article-title a:hover{text-decoration:underline}
+      .article-meta{font-size:0.85rem;color:var(--muted);margin-bottom:0.4rem}
+      .article-excerpt{color:var(--muted);line-height:1.5}
+
+      footer{padding:1rem;text-align:center;color:var(--muted);font-size:0.9rem;margin-top:2rem}
+
+      @media (prefers-color-scheme: dark){
+        :root{color-scheme:dark;}
+        :root{--bg:#0b0f12;--text:#e6eef3;--muted:#9aa7b2;--accent:#4aa3ff;--card-bg: rgba(255,255,255,0.02);--input-bg: rgba(255,255,255,0.03);--input-border: rgba(255,255,255,0.06);}
+      }
+    </style>
+
+    <script nonce="<%= content_security_policy_nonce %>">
+      function toggleDark(){
+        var root=document.documentElement;
+        if(root.classList.contains('dark')){root.classList.remove('dark');localStorage.setItem('dark','0');}
+        else{root.classList.add('dark');localStorage.setItem('dark','1');}
+      }
+      document.addEventListener('DOMContentLoaded',function(){
+        if(localStorage.getItem('dark')==='1' || (localStorage.getItem('dark')===null && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)){
+          document.documentElement.classList.add('dark');
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <header>
+      <div class="brand"><a href="<%= root_path %>" style="color:inherit;text-decoration:none;">RSS READER</a></div>
+      <div style="display:flex;align-items:center;gap:0.75rem;">
+        <nav>
+          <a href="<%= root_path %>" class="<%= current_page?(root_path) ? 'active' : '' %>">Notícias</a>
+          <a href="<%= feeds_path %>" class="<%= current_page?(feeds_path) ? 'active' : '' %>">Feeds</a>
+          <a href="<%= new_feed_path %>">+ Adicionar Feed</a>
+        </nav>
+
+        <% if user_signed_in? %>
+          <span class="muted" style="margin-left:0.6rem;">Olá, <%= current_user.email %></span>
+          <%= button_to 'Sair', destroy_user_session_path, method: :delete, class: 'btn', form: { style: 'display:inline-block;margin-left:0.6rem;' } %>
+        <% else %>
+          <%= link_to 'Entrar', new_user_session_path, class: 'btn', style: 'margin-left:0.4rem;' %>
+          <%= link_to 'Registrar', new_user_registration_path, class: 'btn', style: 'margin-left:0.4rem;' %>
+        <% end %>
+
+        <button class="btn" onclick="toggleDark()" style="margin-left:0.6rem;">Toggle Theme</button>
+      </div>
+    </header>
+
+    <main>
+      <% if defined?(flash) && flash[:notice].present? %>
+        <div class="card"><%= flash[:notice] %></div>
+      <% end %>
+      <% if defined?(flash) && flash[:alert].present? %>
+        <div class="card"><%= flash[:alert] %></div>
+      <% end %>
+
+      <%= yield %>
+    </main>
+
+    <footer>
+      Minimalist reader — monospace & dark mode
+    </footer>
+  </body>
+</html>

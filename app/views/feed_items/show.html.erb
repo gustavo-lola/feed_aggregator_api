@@ -1,0 +1,17 @@
+<div class="card">
+  <h1 class="article-title"><%= @feed_item.title %></h1>
+  <div class="article-meta"><span class="muted"><%= @feed_item.feed&.name %></span> • <%= @feed_item.published_at.presence || @feed_item.created_at %> <% unless @feed_item.read %> • <strong>unread</strong><% end %></div>
+
+  <div style="margin-top:1rem;">
+    <% if @feed_item.content_at.present? %>
+      <div class="article-excerpt"><%= sanitize(@feed_item.content_at) %></div>
+    <% else %>
+      <p class="article-excerpt"><%= @feed_item.url %></p>
+    <% end %>
+  </div>
+
+  <div style="margin-top:1rem;">
+    <a href="<%= @feed_item.url %>" target="_blank" rel="noopener" class="btn">Ler artigo completo →</a>
+    <%= link_to 'Voltar', feed_items_path, class: 'btn' %>
+  </div>
+</div>

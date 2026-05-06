@@ -1,0 +1,26 @@
+<h1>Feeds</h1>
+
+<p class="muted">Unread: <%= @unread_count.to_i %></p>
+<p style="margin-bottom:0.8rem;"><%= link_to 'Novo Feed', new_feed_path, class: 'btn' %></p>
+
+<div>
+  <% if @feeds.present? && @feeds.any? %>
+    <% @feeds.each do |feed| %>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <strong><%= link_to feed.name, feed_path(feed) %></strong>
+            <div class="muted"><%= feed.category %> • <%= feed.url %></div>
+          </div>
+          <div style="display:flex;gap:0.5rem;">
+            <%= button_to 'Refresh', refresh_feed_path(feed), method: :post, class: 'btn' %>
+            <%= link_to 'Edit', edit_feed_path(feed), class: 'btn' %>
+            <%= link_to 'Delete', feed_path(feed), method: :delete, data: { confirm: 'Remover feed?' }, class: 'btn' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="empty">Nenhum feed cadastrado.</div>
+  <% end %>
+</div>
