@@ -28,10 +28,11 @@ Instalação rápida
 
 1. Clone o repositório
 
-   git clone [httpsfeed+agregator-api](https://github.com/gustavo-lola/feed_aggregator_api)
+   git clone https://github.com/gustavo-lola/feed_aggregator_api
+   
    cd feed-aggregator-api
 
-2. Instale dependências Ruby
+3. Instale dependências Ruby
    bundle install
 
 
